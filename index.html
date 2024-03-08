@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Bilingual Singing Voice Synthesis
+  <meta name=" keywords" content="BiSinger">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Singing Voice Data Scaling-up: An Introduction to ACE-Opencpop and ACE-KiSing</title>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+
+        <!-- <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div> -->
+      </div>
+
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title" style="width: 100vw;">Singing Voice Data Scaling-up:<br>An
+              Introduction to ACE-Opencpop and ACE-KiSing</h1>
+            <div class="is-size-5 publication-authors">
+              </span>
+              <span class="author-block"><em>Anonymous Submission</em></span>
+            </div>
+
+            <!-- <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>†</sup>Corresponding author: <a href="mailto:ming.li369@duke.edu">ming.li369@duke.edu</a></span> -->
+            <!-- code will be available once published -->
+            <div class="column has-text-centered">
+              <span class="link-block">
+            </div>
+            <!-- 
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+               -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              In singing voice synthesis (SVS), generating singing voices from musical scores faces challenges due to
+              limited data availability, a constraint less common in text-to-speech (TTS). This study proposes a unique
+              strategy to address the data scarcity in SVS. We employ an existing singing voice synthesizer for data
+              augmentation, complemented by detailed manual tuning, an approach not previously explored in data
+              curation, to reduce instances of unnatural voice synthesis. This innovative method has led to the creation
+              of two expansive singing voice datasets, ACE-Opencpop and ACE-KiSing, which are instrumental for
+              large-scale, multi-singer voice synthesis. Through thorough experimentation, we establish that these
+              datasets not only serve as new benchmarks for SVS but also enhance SVS performance on other singing voice
+              datasets when used as supplementary resources. Post the anonymization process, the datasets, along with
+              the pre-trained models and associated training recipes, will be made available to the public.
+            </p>
+          </div>
+          <!-- table -->
+          <h2 class="title is-3">Comparison</h2>
+          <table class="table is-fullwidth">
+            <caption>Comparison between the proposed corpora and existing singing voice benchmarks. SVS and SVC denote
+              whether the corresponding corpus can be used for synthesis or conversion purpose. NC denotes
+              non-commercial, while ND denotes non-derivatives.</caption>
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Year</th>
+                <th>Language</th>
+                <th># of Songs</th>
+                <th>Dur. (hour)</th>
+                <th># of Singers</th>
+                <th>Dur./Singer (hour)</th>
+                <th>Score</th>
+                <th>SVS</th>
+                <th>SVC</th>
+                <th>License</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>NIT SONG070 F001</td>
+                <td>2015</td>
+                <td>JP</td>
+                <td>31</td>
+                <td>1.2</td>
+                <td>1</td>
+                <td>1.2</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✗</td>
+                <td>CC</td>
+              </tr>
+              <tr>
+                <td>JSUT Song</td>
+                <td>2018</td>
+                <td>JP</td>
+                <td>27</td>
+                <td>0.4</td>
+                <td>1</td>
+                <td>0.4</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✗</td>
+                <td>CC-NC-ND</td>
+              </tr>
+              <tr>
+                <td>Kiritan</td>
+                <td>2021</td>
+                <td>JP</td>
+                <td>50</td>
+                <td>1.0</td>
+                <td>1</td>
+                <td>1.0</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✗</td>
+                <td>Research-only</td>
+              </tr>
+              <tr>
+                <td>KiSing-v1</td>
+                <td>2021</td>
+                <td>CN</td>
+                <td>14</td>
+                <td>0.7</td>
+                <td>1</td>
+                <td>0.7</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✗</td>
+                <td>CC-NC</td>
+              </tr>
+              <tr>
+                <td>Opencpop</td>
+                <td>2022</td>
+                <td>CN</td>
+                <td>100</td>
+                <td>5.2</td>
+                <td>1</td>
+                <td>5.2</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✗</td>
+                <td>CC-NC-ND</td>
+              </tr>
+              <tr>
+                <td>PopCS</td>
+                <td>2022</td>
+                <td>CN</td>
+                <td>117</td>
+                <td>5.9</td>
+                <td>1</td>
+                <td>5.9</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>CC-NC</td>
+              </tr>
+              <tr>
+                <td>NUS-48E</td>
+                <td>2013</td>
+                <td>EN</td>
+                <td>48</td>
+                <td>1.9</td>
+                <td>12</td>
+                <td>0.2</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>✓</td>
+                <td>Research-only</td>
+              </tr>
+              <tr>
+                <td>NHSS</td>
+                <td>2019</td>
+                <td>EN</td>
+                <td>100</td>
+                <td>4.8</td>
+                <td>10</td>
+                <td>0.5</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>✓</td>
+                <td>Research-only</td>
+              </tr>
+              <tr>
+                <td>JVS-MuSiC</td>
+                <td>2020</td>
+                <td>JP</td>
+                <td>2</td>
+                <td>2.3</td>
+                <td>100</td>
+                <td>0.2</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>✓</td>
+                <td>CC</td>
+              </tr>
+              <tr>
+                <td>OpenSinger</td>
+                <td>2021</td>
+                <td>CN</td>
+                <td>1146</td>
+                <td>50.0</td>
+                <td>66</td>
+                <td>0.8</td>
+                <td>✗</td>
+                <td>✗</td>
+                <td>✓</td>
+                <td>CC-NC</td>
+              </tr>
+              <tr>
+                <td>M4Singer</td>
+                <td>2022</td>
+                <td>CN</td>
+                <td>700</td>
+                <td>29.8</td>
+                <td>20</td>
+                <td>1.5</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>CC-NC</td>
+              </tr>
+              <tr>
+                <td>SingStyle111</td>
+                <td>2023</td>
+                <td>CN/EN/IT</td>
+                <td>224</td>
+                <td>12.8</td>
+                <td>8</td>
+                <td>1.6</td>
+                <td>✓</td>
+                <td>✗</td>
+                <td>✓</td>
+                <td>Restricted</td>
+              </tr>
+              <tr class="is-selected">
+                <td>ACE-Opencpop</td>
+                <td>2024</td>
+                <td>CN</td>
+                <td>100</td>
+                <td>128.9</td>
+                <td>30</td>
+                <td>4.3</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>CC-NC</td>
+              </tr>
+              <tr class="is-selected">
+                <td>ACE-KiSing</td>
+                <td>2024</td>
+                <td>CN/EN</td>
+                <td>23</td>
+                <td>32.5</td>
+                <td>34</td>
+                <td>1.0</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>CC-NC</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+  </section>
+  <section class="hero is-light is-small">
+    <div class="hero-body">
+      <div class="container hero-body is-max-desktop">
+        <h2 class="title is-3">Dataset Samples</h2>
+        <h3 class="title is-4">1. Source singing voices from Opencpop vs. ACE-Opencpop</h3>
+        <table class="table is-fullwidth" style="table-layout: fixed">
+          <tr>
+            <th>Opencpop</th>
+            <th><span style="background-color:#00AC94; color:#fff;padding: 5px;border-radius: 5px;">ACE-Opencpop</th>
+          </tr>
+          <tr>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+          </tr>
+        </table>
+        <h3 class="title is-4">2. Source singing voices from KiSing vs. ACE-KiSing</h3>
+        <table class="table is-fullwidth" style="table-layout: fixed">
+          <tr>
+            <th>KiSing</th>
+            <th><span style="background-color:#00AC94; color:#fff;padding: 5px;border-radius: 5px;">ACE-KiSing</th>
+          </tr>
+          <tr>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+          </tr>
+        </table>
+  </section>
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="content">
+        <h2 class="title is-3">Synthesis Results</h2>
+        <h3 class="title is-4">1. Transfer learning</h3>
+        <p class="title is-5">
+          <span style="background-color: #4CAF50;
+          color: white;
+          padding: 0.2em 0.6em;
+          border-radius: 0.2em;">In-domain</span>
+        </p>
+        <table class="table is-fullwidth" style="table-layout: fixed; text-align: center;">
+          <tr>
+            <th>Ground Truth</th>
+            <th>Direct Training Result</th>
+            <th><span style="background-color:#00AC94; color:#fff;padding: 5px;border-radius: 5px;">Transfer Learning Result</span></th>
+          </tr>
+          <tr>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+          </tr>
+        </table>
+        <hr style="border-top: 1px solid #209cee;">
+        <p class="title is-5">
+          <span style="background-color: #4CAF50;
+          color: white;
+          padding: 0.2em 0.6em;
+          border-radius: 0.2em;">Out-domain</span>
+        </p>
+        <table class="table is-fullwidth" style="table-layout: fixed; text-align: center;">
+          <tr>
+            <th>Ground Truth</th>
+            <th>Direct Training Result</th>
+            <th><span style="background-color:#00AC94; color:#fff;padding: 5px;border-radius: 5px;">Transfer Learning Result</span></th>
+          </tr>
+          <tr>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+          </tr>
+        </table>
+        <h3 class="title is-4">2. Joint training</h3>
+        <table class="table is-fullwidth" style="table-layout: fixed; text-align: center;">
+          <tr>
+            <th>Ground Truth</th>
+            <th>Direct Training Result</th>
+            <th><span style="background-color:#00AC94; color:#fff;padding: 5px;border-radius: 5px;">Joint Training Result</span></th>
+          </tr>
+          <tr>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+            <td>
+              <audio controls style="width: 100%;">
+                <source src="./static/audio/2.wav" type="audio/wav">
+                Your browser does not support the audio element.
+              </audio>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+        <!-- 
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+  </div>
+</section> -->
+
+
+        <footer class="footer">
+          <div class="container">
+            <!-- <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div> -->
+            <div class="columns is-centered">
+              <div class="column is-8">
+                <div class="content has-text-centered">
+                  <p>
+                    This website is licensed under a <a rel="license"
+                      href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                      Commons Attribution-ShareAlike 4.0 International License</a>.
+                  </p>
+                  <p class="is-size-7">
+                    Template: <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+</body>
+
+</html>
